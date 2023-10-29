@@ -1,0 +1,22 @@
+<div th:fragment="head" th:remove="tag">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
+    <div class="container">
+        <h3>Сервис WS-DJU</h3>
+    </div>
+    <div class="container">
+        <div th:fragment="header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#" th:href="@{/}">Главная</a>
+                        <a class="navbar-brand" href="#" th:href="@{/list}">Список запросов</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

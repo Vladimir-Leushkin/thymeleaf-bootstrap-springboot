@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Employee</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="~{fragments/head :: head}"></div>
+</head>
+<body>
+
+<div class="container">
+
+    <h3>Add New Employee</h3>
+    <hr/>
+
+    <form class="row g-3 requires-validation" novalidate th:action="@{/saveEmployee}" th:object="${employee}" method="POST">
+        <div class="row mb-3">
+            <div class="mb-3 row" th:if="${emptyResponse ne null}">
+                <label for="name" th:text="${emptyResponse}" class="col-form-label"></label>
+            </div>
+            <input type="text" th:field="*{name}" class="form-control col-4 mb-4" id="name"
+                   pattern="\d{4}-\d{7}-\d{8}-\d{8}\/\d{2}" placeholder="Формат: 1234-1234567-12345678-12345678/12" size="36">
+            <div class="valid-feedback">
+                Username looks good!
+            </div>
+            <div class="invalid-feedback">
+                Username is required!
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">Эл. адрес</label>
+            <input type="text" th:field="*{email}" class="form-control col-4 mb-4" placeholder="Enter email" id="inputEmail4">
+        </div>
+        <div class="col-md-2">
+            <label for="inputZip" class="form-label">Индекс</label>
+            <input type="text" th:field="*{department}" class="form-control col-4 mb-4" placeholder="Enter department" id="inputZip">
+        </div>
+        <button type="submit" class="btn btn-primary col-2">Save</button>
+        <input type="hidden" th:field="*{id}"/>
+    </form>
+    <hr/>
+    <a th:href="@{/list}">Back to list</a>
+</div>
+</body>
+</html>

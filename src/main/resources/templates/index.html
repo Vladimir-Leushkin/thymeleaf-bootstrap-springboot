@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="~{fragments/head :: head}"></div>
+</head>
+<body>
+<div class="container mt-5">
+    <form id="search-form" class="row g-3 requires-validation" novalidate th:action="@{/search}" th:object="${name}" method="get">
+        <div class="mb-3 row" th:if="${emptyResponse ne null}">
+            <label for="name" th:text="${emptyResponse}" class="col-form-label"></label>
+        </div>
+        <div class="col-md-6">
+            <input type="text" required="true" th:value="${name}" class="form-control"
+                   placeholder="Формат: 1234-1234567-12345678-12345678/12"
+                   size="36"
+                   name="name"
+                   id="name"
+                   pattern="\d{4}-\d{7}-\d{8}-\d{8}\/\d{2}">
+            <div class="valid-feedback">
+                Верный формат requestId!
+            </div>
+            <div class="invalid-feedback">
+                Неверный формат requestId!
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" id="button-addon2" class="btn btn-success">Поиск</button>
+        </div>
+    </form>
+</div>
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.requires-validation')
+
+        Array.from(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity() || !$('#name').val()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+</body>
+</html>
