@@ -1,77 +1,88 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>List Employees</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <div th:replace="~{fragments/head :: head}"></div>
+    <title>List Employees</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="~{fragments/head :: head}"></div>
 </head>
 
 <body>
 
 <div class="container">
-  <h3>List Employees</h3>
-  <hr/>
-  <a th:href="@{/addEmployeeForm}" class="btn btn-primary">Add Employee</a>
-  <br/><br/>
-  <table class="table table-sm table-bordered table-hover table-striped" id="employeeTable">
-    <thead>
-    <tr>
-      <td>#</td>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Department</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="employee: ${employees}">
-      <td />
-      <td th:text="${employee.name}" />
-      <td th:text="${employee.email}" />
-      <td th:text="${employee.department}" />
-      <td>
-        <a th:href="@{/showUpdateForm(employeeId=${employee.id})}" class="btn btn-info">Update</a>
+    <h3>List Employees<i class="bi-globe"></i></h3>
+    <i class="bi bi-list-columns-reverse"></i>
+    <hr/>
+    <a th:href="@{/addEmployeeForm}" class="btn btn-primary">Add Employee</a>
+    <br/><br/>
+    <div th:if="${emptyResponse != null}" class="alert alert-success alert-dismissible fade show text-center message"
+         role="alert">
+        [[${emptyResponse}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div th:if="${not #lists.isEmpty(employees)}">
+        <table class="table table-sm table-bordered table-hover table-striped" id="employeeTable">
+            <thead>
+            <tr>
+                <td>#</td>
+                <th th:replace="fragments/sorting :: sorting('name','Name')"></th>
+                <th th:replace="fragments/sorting :: sorting('email','Email')"></th>
+                <th th:replace="fragments/sorting :: sorting('department','Department')"></th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee: ${employees}">
+                <td/>
+                <td>[[${employee.name}]]</td>
+                <td>[[${employee.email}]]</td>
+                <td>[[${employee.department}]]</td>
+                <td>
+                    <a th:href="@{/showUpdateForm(employeeId=${employee.id})}" class="btn btn-info">Update</a>
 
-        <a th:href="@{/deleteEmployee(employeeId=${employee.id})}" class="btn btn-danger ml-2">Delete</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+                    <a th:href="@{/deleteEmployee(employeeId=${employee.id})}" class="btn btn-danger ml-2">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <nav aria-label="Pagination" th:if="${totalPages > 0}">
-  <ul class="pagination justify-content-center">
-    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-      <a th:replace="~{fragments/paging :: paging(1, '<<', 'First Page')}"></a>
-    </li>
-    <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
-      <a th:replace="~{fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')}"></a>
-    </li>
-    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
-      <a class="page-link" href="#">...</a>
-    </li>
-    <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
-        th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
-      <a th:replace="~{fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})}"></a>
-    </li>
-    <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
-      <a class="page-link" href="#">...</a>
-    </li>
-    <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
-      <a th:replace="~{fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')}"></a>
-    </li>
-    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-      <a th:replace="~{fragments/paging :: paging(${totalPages}, '>>', 'Last Page')}"></a>
-    </li>
-  </ul>
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+            <a th:replace="~{fragments/paging :: paging(1, '<<', 'First Page')}"></a>
+        </li>
+        <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+            <a th:replace="~{fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')}"></a>
+        </li>
+        <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+            <a class="page-link" href="#">...</a>
+        </li>
+        <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+            th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+            <a th:replace="~{fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})}"></a>
+        </li>
+        <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+            <a class="page-link" href="#">...</a>
+        </li>
+        <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+            <a th:replace="~{fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')}"></a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+            <a th:replace="~{fragments/paging :: paging(${totalPages}, '>>', 'Last Page')}"></a>
+        </li>
+    </ul>
 </nav>
 <script>
-  $('.table tbody tr').each(function(i) {
-    const curPage = [[${currentPage}]];
-    const curSize = [[${pageSize}]]
-    let number = curSize*(curPage - 1) + i + 1;
-    $(this).find('td:first').text(number+".");
-  });
+    $('.table tbody tr').each(function (i) {
+        const curPage = [[${currentPage}]];
+        const curSize = [[${pageSize}]]
+        let number = curSize * (curPage - 1) + i + 1;
+        $(this).find('td:first').text(number + ".");
+    });
 </script>
+
 </body>
 
 </html>
